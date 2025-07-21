@@ -6,7 +6,7 @@ import BackgroundRays from '~/components/ui/BackgroundRays';
 import { Header } from '~/components/header/Header';
 import { FrameworkSelector } from '~/components/templates/FrameworkSelector';
 import { FeatureList } from '~/components/templates/FeatureList';
-import ButtonUseTemplate from '~/components/templates/ButtonUseTemplate';
+import ButtonUseTemplate from '~/components/templates/ButtonUseTemplate.client';
 
 export default function Index() {
   const { id } = useParams();
