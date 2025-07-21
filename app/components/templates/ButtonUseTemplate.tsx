@@ -1,4 +1,3 @@
-import { useChatHistory } from '~/lib/persistence';
 import { classNames } from '~/utils/classNames';
 import type { Message } from 'ai';
 // eslint-disable-next-line no-restricted-imports
@@ -9,6 +8,7 @@ import { useState } from 'react';
 import ignore from 'ignore';
 import { createCommandsMessage, detectProjectCommands, escapeBoltTags } from '~/utils/projectCommands';
 import { generateId } from '~/utils/fileUtils';
+import type { IChatMetadata } from '~/lib/persistence/db';
 
 const IGNORE_PATTERNS = [
   'node_modules/**',
@@ -37,10 +37,10 @@ const MAX_TOTAL_SIZE = 500 * 1024; // 500KB total limit
 
 interface ButtonUseTemplateProps {
   githubUrl: string;
+  importChat?: (description: string, messages: Message[], metadata?: IChatMetadata) => Promise<void>;
 }
 
-const ButtonUseTemplate = ({ githubUrl }: ButtonUseTemplateProps) => {
-  const { importChat } = useChatHistory();
+const ButtonUseTemplate = ({ githubUrl, importChat }: ButtonUseTemplateProps) => {
   const { ready, gitClone } = useGit();
   const [loading, setLoading] = useState(false);
 

@@ -6,7 +6,7 @@ import BackgroundRays from '~/components/ui/BackgroundRays';
 import { Header } from '~/components/header/Header';
 import { FrameworkSelector } from '~/components/templates/FrameworkSelector';
 import { FeatureList } from '~/components/templates/FeatureList';
-import ButtonUseTemplate from '~/components/templates/ButtonUseTemplate.client';
+import WrapperUseTemplate from '~/components/templates/WrapperUseTemplate.client';
 
 export default function Index() {
   const { id } = useParams();
@@ -69,7 +69,7 @@ export default function Index() {
           {template && (
             <>
               <FeatureList features={template.features} />
-              <ButtonUseTemplate githubUrl={template.githubUrl} />
+              <WrapperUseTemplate githubUrl={template.githubUrl} />
             </>
           )}
         </div>
