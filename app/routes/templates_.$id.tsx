@@ -46,6 +46,31 @@ export default function Index() {
     <div className="flex flex-col w-full bg-bolt-elements-background-depth-1">
       <BackgroundRays />
       <Header />
+      <div className="space-y-8 my-10">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <h1 className="text-3xl font-bold dark:text-white">Web ecommerce - {template?.name}</h1>
+          <p className="text-gray-400 max-w-2xl">
+            Một mẫu giao diện hiện đại, tinh gọn dành cho các cửa hàng thời trang cao cấp – nổi bật với phong cách thiết
+            kế tối giản, kiểu chữ thanh lịch và điểm nhấn tập trung vào hình ảnh sản phẩm.
+          </p>
+        </div>
+
+        {/* List model */}
+        <div className="container mx-auto space-y-6">
+          <img
+            src={template?.backgroundImage || '/assets/template-2.png'}
+            alt={'image'}
+            className="object-fit w-full h-[80vh]"
+          />
+          {/* <FrameworkSelector frameworks={framework} />
+          {template && (
+            <>
+              <FeatureList features={template.features} />
+              <ButtonUseTemplate githubUrl={template.githubUrl} branch={template.branch} />
+            </>
+          )} */}
+        </div>
+      </div>
     </div>
   );
 }
