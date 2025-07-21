@@ -40,114 +40,112 @@ interface ButtonUseTemplateProps {
 }
 
 const ButtonUseTemplate = ({ githubUrl }: ButtonUseTemplateProps) => {
-  const { importChat } = useChatHistory();
-  const { ready, gitClone } = useGit();
-  const [loading, setLoading] = useState(false);
+  
 
-  const handleClone = async () => {
-    if (!ready) {
-      return;
-    }
+//   const handleClone = async () => {
+//     if (!ready) {
+//       return;
+//     }
 
-    setLoading(true);
+//     setLoading(true);
 
-    try {
-      const { workdir, data } = await gitClone(githubUrl);
+//     try {
+//       const { workdir, data } = await gitClone(githubUrl);
 
-      if (importChat) {
-        const filePaths = Object.keys(data).filter((filePath) => filePath === '.env' || !ig.ignores(filePath));
-        const textDecoder = new TextDecoder('utf-8');
+//       if (importChat) {
+//         const filePaths = Object.keys(data).filter((filePath) => filePath === '.env' || !ig.ignores(filePath));
+//         const textDecoder = new TextDecoder('utf-8');
 
-        let totalSize = 0;
-        const skippedFiles: string[] = [];
-        const fileContents = [];
+//         let totalSize = 0;
+//         const skippedFiles: string[] = [];
+//         const fileContents = [];
 
-        for (const filePath of filePaths) {
-          const { data: content, encoding } = data[filePath];
+//         for (const filePath of filePaths) {
+//           const { data: content, encoding } = data[filePath];
 
-          // Skip binary files
-          if (
-            content instanceof Uint8Array &&
-            !filePath.match(/\.(txt|md|js|jsx|ts|tsx|json|html|css|scss|less|yml|yaml|xml|svg|png|jpg|env)$/i)
-          ) {
-            skippedFiles.push(filePath);
-            continue;
-          }
+//           // Skip binary files
+//           if (
+//             content instanceof Uint8Array &&
+//             !filePath.match(/\.(txt|md|js|jsx|ts|tsx|json|html|css|scss|less|yml|yaml|xml|svg|png|jpg|env)$/i)
+//           ) {
+//             skippedFiles.push(filePath);
+//             continue;
+//           }
 
-          try {
-            const textContent =
-              encoding === 'utf8' ? content : content instanceof Uint8Array ? textDecoder.decode(content) : '';
+//           try {
+//             const textContent =
+//               encoding === 'utf8' ? content : content instanceof Uint8Array ? textDecoder.decode(content) : '';
 
-            if (!textContent) {
-              continue;
-            }
+//             if (!textContent) {
+//               continue;
+//             }
 
-            // Check file size
-            const fileSize = new TextEncoder().encode(textContent).length;
+//             // Check file size
+//             const fileSize = new TextEncoder().encode(textContent).length;
 
-            if (fileSize > MAX_FILE_SIZE) {
-              skippedFiles.push(`${filePath} (too large: ${Math.round(fileSize / 1024)}KB)`);
-              continue;
-            }
+//             if (fileSize > MAX_FILE_SIZE) {
+//               skippedFiles.push(`${filePath} (too large: ${Math.round(fileSize / 1024)}KB)`);
+//               continue;
+//             }
 
-            // Check total size
-            if (totalSize + fileSize > MAX_TOTAL_SIZE) {
-              skippedFiles.push(`${filePath} (would exceed total size limit)`);
-              continue;
-            }
+//             // Check total size
+//             if (totalSize + fileSize > MAX_TOTAL_SIZE) {
+//               skippedFiles.push(`${filePath} (would exceed total size limit)`);
+//               continue;
+//             }
 
-            totalSize += fileSize;
-            fileContents.push({
-              path: filePath,
-              content: textContent,
-            });
-          } catch (e: any) {
-            skippedFiles.push(`${filePath} (error: ${e.message})`);
-          }
-        }
+//             totalSize += fileSize;
+//             fileContents.push({
+//               path: filePath,
+//               content: textContent,
+//             });
+//           } catch (e: any) {
+//             skippedFiles.push(`${filePath} (error: ${e.message})`);
+//           }
+//         }
 
-        const commands = await detectProjectCommands(fileContents);
-        const commandsMessage = createCommandsMessage(commands);
+//         const commands = await detectProjectCommands(fileContents);
+//         const commandsMessage = createCommandsMessage(commands);
 
-        const filesMessage: Message = {
-          role: 'assistant',
-          content: `Cloning the repo ${githubUrl} into ${workdir}
-${
-  skippedFiles.length > 0
-    ? `\nSkipped files (${skippedFiles.length}):
-${skippedFiles.map((f) => `- ${f}`).join('\n')}`
-    : ''
-}
+//         const filesMessage: Message = {
+//           role: 'assistant',
+//           content: `Cloning the repo ${githubUrl} into ${workdir}
+// ${
+//   skippedFiles.length > 0
+//     ? `\nSkipped files (${skippedFiles.length}):
+// ${skippedFiles.map((f) => `- ${f}`).join('\n')}`
+//     : ''
+// }
 
-<boltArtifact id="imported-files" title="Git Cloned Files" type="bundled">
-${fileContents
-  .map(
-    (file) =>
-      `<boltAction type="file" filePath="${file.path}">
-${escapeBoltTags(file.content)}
-</boltAction>`,
-  )
-  .join('\n')}
-</boltArtifact>`,
-          id: generateId(),
-          createdAt: new Date(),
-        };
+// <boltArtifact id="imported-files" title="Git Cloned Files" type="bundled">
+// ${fileContents
+//   .map(
+//     (file) =>
+//       `<boltAction type="file" filePath="${file.path}">
+// ${escapeBoltTags(file.content)}
+// </boltAction>`,
+//   )
+//   .join('\n')}
+// </boltArtifact>`,
+//           id: generateId(),
+//           createdAt: new Date(),
+//         };
 
-        const messages = [filesMessage];
+//         const messages = [filesMessage];
 
-        if (commandsMessage) {
-          messages.push(commandsMessage);
-        }
+//         if (commandsMessage) {
+//           messages.push(commandsMessage);
+//         }
 
-        await importChat(`Git Project:${githubUrl.split('/').slice(-1)[0]}`, messages);
-      }
-    } catch (error) {
-      console.error('Error during import:', error);
-      toast.error('Failed to import repository');
-    } finally {
-      setLoading(false);
-    }
-  };
+//         await importChat(`Git Project:${githubUrl.split('/').slice(-1)[0]}`, messages);
+//       }
+//     } catch (error) {
+//       console.error('Error during import:', error);
+//       toast.error('Failed to import repository');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
   return (
     <Button
@@ -162,8 +160,7 @@ ${escapeBoltTags(file.content)}
         'h-10 px-4 py-2 min-w-[120px] justify-center',
         'transition-all duration-200 ease-in-out',
       )}
-      disabled={!ready || loading}
-      onClick={handleClone}
+      // onClick={handleClone}
     >
       Use This Template
     </Button>
