@@ -69,7 +69,7 @@ export default function Index() {
           {template && (
             <>
               <FeatureList features={template.features} />
-              <WrapperUseTemplate githubUrl={template.githubUrl} />
+              <WrapperUseTemplate githubUrl={template.githubUrl} branch={template.branch} />
             </>
           )}
         </div>

@@ -3,12 +3,13 @@ import ButtonUseTemplate from './ButtonUseTemplate';
 
 interface WrapperUseTemplateProps {
   githubUrl: string;
+  branch: string;
 }
 
-const WrapperUseTemplate = ({ githubUrl }: WrapperUseTemplateProps) => {
+const WrapperUseTemplate = ({ githubUrl, branch }: WrapperUseTemplateProps) => {
   const { ready, importChat } = useChatHistory();
 
-  return <div>{ready && <ButtonUseTemplate githubUrl={githubUrl} importChat={importChat} />}</div>;
+  return <div>{ready && <ButtonUseTemplate githubUrl={githubUrl} importChat={importChat} branch={branch} />}</div>;
 };
 
 export default WrapperUseTemplate;

@@ -37,10 +37,11 @@ const MAX_TOTAL_SIZE = 500 * 1024; // 500KB total limit
 
 interface ButtonUseTemplateProps {
   githubUrl: string;
-  importChat?: (description: string, messages: Message[], metadata?: IChatMetadata) => Promise<void>;
+  branch: string;
+  importChat?: (description: string, messages: Message[], branch?: string, metadata?: IChatMetadata) => Promise<void>;
 }
 
-const ButtonUseTemplate = ({ githubUrl, importChat }: ButtonUseTemplateProps) => {
+const ButtonUseTemplate = ({ githubUrl, importChat, branch }: ButtonUseTemplateProps) => {
   const { ready, gitClone } = useGit();
   const [loading, setLoading] = useState(false);
 
@@ -52,7 +53,7 @@ const ButtonUseTemplate = ({ githubUrl, importChat }: ButtonUseTemplateProps) =>
     setLoading(true);
 
     try {
-      const { workdir, data } = await gitClone(githubUrl);
+      const { workdir, data } = await gitClone(githubUrl, branch);
 
       if (importChat) {
         const filePaths = Object.keys(data).filter((filePath) => filePath === '.env' || !ig.ignores(filePath));
@@ -139,7 +140,7 @@ ${escapeBoltTags(file.content)}
           messages.push(commandsMessage);
         }
 
-        await importChat(`Git Project:${githubUrl.split('/').slice(-1)[0]}`, messages);
+        await importChat(`Git Project:${githubUrl.split('/').slice(-1)[0]}`, messages, branch);
       }
     } catch (error) {
       console.error('Error during import:', error);

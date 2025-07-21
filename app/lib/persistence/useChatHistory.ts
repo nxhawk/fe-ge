@@ -356,14 +356,14 @@ ${value.content}
         console.log(error);
       }
     },
-    importChat: async (description: string, messages: Message[], metadata?: IChatMetadata) => {
+    importChat: async (description: string, messages: Message[], branch?: string, metadata?: IChatMetadata) => {
       if (!db) {
         return;
       }
 
       try {
         const newId = await createChatFromMessages(db, description, messages, metadata);
-        window.location.href = `/chat/${newId}`;
+        window.location.href = `/chat/${newId}${branch ? `?branch=${branch}` : ''}`;
         toast.success('Chat imported successfully');
       } catch (error) {
         if (error instanceof Error) {
