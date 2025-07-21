@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import type { Framework, Template } from '~/types/template';
 import { useTemplateStore } from '~/store';
 import { useParams } from '@remix-run/react';
+import BackgroundRays from '~/components/ui/BackgroundRays';
+import { Header } from '~/components/header/Header';
 
 export default function Index() {
   const { id } = useParams();
@@ -40,5 +42,10 @@ export default function Index() {
     fetch();
   }, [id]);
 
-  return <div className="flex flex-col w-full bg-bolt-elements-background-depth-1">hello</div>;
+  return (
+    <div className="flex flex-col w-full bg-bolt-elements-background-depth-1">
+      <BackgroundRays />
+      <Header />
+    </div>
+  );
 }
