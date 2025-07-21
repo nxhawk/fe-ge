@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FeatureCard } from './FeatureCard';
-import type { TemplateFeature } from 'types/template';
+import type { TemplateFeature } from '~/types/template';
 
 interface FeatureListProps {
   features: TemplateFeature[];

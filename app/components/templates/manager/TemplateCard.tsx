@@ -1,5 +1,5 @@
 import { Edit2, Trash2, Github, Video } from 'lucide-react';
-import type { Template } from 'types/template';
+import type { Template } from '~/types/template';
 
 interface TemplateCardProps {
   template: Template;
@@ -10,12 +10,7 @@ interface TemplateCardProps {
 export function TemplateCard({ template, onEdit, onDelete }: TemplateCardProps) {
   return (
     <div className="bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700">
-      <img
-        // src={`/api/image-proxy?url=${encodeURIComponent(template.backgroundImage)}`}
-        src={'/placeholder.svg'}
-        alt="Ảnh"
-        className="h-48 bg-cover bg-center w-full"
-      />
+      <img src={'/placeholder.svg'} alt="Ảnh" className="h-48 bg-cover bg-center w-full" />
 
       <div className="p-6">
         <div className="flex justify-between items-start">

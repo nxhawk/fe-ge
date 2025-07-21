@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Video } from 'lucide-react';
-import type { TemplateFeature } from 'types/template';
+import type { TemplateFeature } from '~/types/template';
 
 interface TemplateFormProps {
   onSubmit: (data: { name: string; backgroundImage: string; githubUrl: string; features: TemplateFeature[] }) => void;

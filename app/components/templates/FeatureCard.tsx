@@ -1,5 +1,5 @@
 import { Check, ChevronDown, Lock, MonitorPlay } from 'lucide-react';
-import type { TemplateFeature } from 'types/template';
+import type { TemplateFeature } from '~/types/template';
 import { ClientOnly } from 'remix-utils/client-only';
 
 interface FeatureCardProps {
