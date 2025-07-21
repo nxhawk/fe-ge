@@ -66,12 +66,12 @@ export default function Index() {
             className="object-fit w-full h-[80vh]"
           />
           <FrameworkSelector frameworks={framework} />
-          {/* {template && (
+          {template && (
             <>
               <FeatureList features={template.features} />
-              <ButtonUseTemplate githubUrl={template.githubUrl} />
+              {/* <ButtonUseTemplate githubUrl={template.githubUrl} /> */}
             </>
-          )} */}
+          )}
         </div>
       </div>
     </div>
