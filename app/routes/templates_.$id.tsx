@@ -4,6 +4,9 @@ import { useTemplateStore } from '~/store';
 import { useParams } from '@remix-run/react';
 import BackgroundRays from '~/components/ui/BackgroundRays';
 import { Header } from '~/components/header/Header';
+import { FrameworkSelector } from '~/components/templates/FrameworkSelector';
+import { FeatureList } from '~/components/templates/FeatureList';
+import ButtonUseTemplate from '~/components/templates/ButtonUseTemplate';
 
 export default function Index() {
   const { id } = useParams();
@@ -62,13 +65,13 @@ export default function Index() {
             alt={'image'}
             className="object-fit w-full h-[80vh]"
           />
-          {/* <FrameworkSelector frameworks={framework} />
+          <FrameworkSelector frameworks={framework} />
           {template && (
             <>
               <FeatureList features={template.features} />
-              <ButtonUseTemplate githubUrl={template.githubUrl} branch={template.branch} />
+              <ButtonUseTemplate githubUrl={template.githubUrl} />
             </>
-          )} */}
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Framework } from '~/types/template';
 
 interface FrameworkSelectorProps {
