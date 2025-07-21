@@ -40,7 +40,8 @@ interface ButtonUseTemplateProps {
 }
 
 const ButtonUseTemplate = ({ githubUrl }: ButtonUseTemplateProps) => {
-  
+  const { importChat } = useChatHistory();
+  const { ready, gitClone } = useGit();
 
 //   const handleClone = async () => {
 //     if (!ready) {
