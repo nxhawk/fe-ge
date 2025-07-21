@@ -69,7 +69,7 @@ export default function Index() {
           {template && (
             <>
               <FeatureList features={template.features} />
-              {/* <ButtonUseTemplate githubUrl={template.githubUrl} /> */}
+              <ButtonUseTemplate githubUrl={template.githubUrl} />
             </>
           )}
         </div>
