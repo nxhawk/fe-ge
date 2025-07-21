@@ -102,8 +102,8 @@ ${summary.summary}`;
   // select files from the list of code file from the project that might be useful for the current request from the user
   const resp = await generateText({
     system: `
-        You are a software engineer. You are working on a project. you need to summarize the work till now and provide a summary of the chat till now.
-
+        You are a software engineer working on an eCommerce web application. Your task is to summarize the progress of the application development so far and provide a structured summary of the entire conversation related to building the eCommerce system.
+        
         Please only use the following format to generate the summary:
 ---
 # Project Overview

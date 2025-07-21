@@ -121,7 +121,8 @@ export async function selectContext(props: {
   // select files from the list of code file from the project that might be useful for the current request from the user
   const resp = await generateText({
     system: `
-        You are a software engineer. You are working on a project. You have access to the following files:
+        You are a software engineer working on an eCommerce application that supports multiple languages. Your task is only related to editing the interface (no adding external libraries yourself), no tweaking to change the API calls
+        You have access to the following files in the project:
 
         AVAILABLE FILES PATHS
         ---
@@ -135,8 +136,22 @@ export async function selectContext(props: {
         ${context}
         ---
 
-        Now, you are given a task. You need to select the files that are relevant to the task from the list of files above.
+        If the user request is related to multi-language content (i18n). Your task is to update the context buffer by selecting only the files that:
 
+        ✅ Are located in the \`locales/\` directory  
+        ✅ Contain translatable strings used in the UI (e.g., button labels, titles, messages)  
+        ✅ (Important) Update required on multiple language files, these files are located in the respective language folder (eg: vn, en)
+        ✅ When changing the content in the language folder, it is necessary to update the corresponding folder to match multiple languages ​​(for example: when updating the content in the vn folder, change the corresponding content to match the language in the en folder,...)
+        ✅ Prioritize editing the appropriate content in the shopData.json file 
+
+        DO NOT include:
+        ❌ Files outside \`locales/\`  
+        ❌ Files already loaded in the context buffer  
+        ❌ Any code or UI components – only translation files
+
+        Now, you are given a task. You need to select the files that are relevant to the task from the list of files above.
+      
+        ❌ Do not change the contents of the services folder.
         RESPONSE FORMAT:
         your response should be in following format:
 ---
