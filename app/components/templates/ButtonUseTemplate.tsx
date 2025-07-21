@@ -5,7 +5,6 @@ import { Button } from '~/components/ui/Button';
 import { toast } from 'react-toastify';
 import { useGit } from '~/lib/hooks/useGit';
 import { useState } from 'react';
-import ignore from 'ignore';
 import { createCommandsMessage, detectProjectCommands, escapeBoltTags } from '~/utils/projectCommands';
 import { generateId } from '~/utils/fileUtils';
 
@@ -42,6 +41,7 @@ const ButtonUseTemplate = ({ githubUrl }: ButtonUseTemplateProps) => {
   const { importChat } = useChatHistory();
   const { ready, gitClone } = useGit();
   const [loading, setLoading] = useState(false);
+
 
   return (
     <Button
