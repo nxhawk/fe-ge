@@ -29,7 +29,7 @@ const IGNORE_PATTERNS = [
   '**/*lock.yaml',
 ];
 
-const ig = ignore().add(IGNORE_PATTERNS);
+// const ig = ignore().add(IGNORE_PATTERNS);
 
 const MAX_FILE_SIZE = 100 * 1024; // 100KB limit per file
 const MAX_TOTAL_SIZE = 500 * 1024; // 500KB total limit
@@ -42,7 +42,6 @@ const ButtonUseTemplate = ({ githubUrl }: ButtonUseTemplateProps) => {
   const { importChat } = useChatHistory();
   const { ready, gitClone } = useGit();
   const [loading, setLoading] = useState(false);
-
 
   return (
     <Button
