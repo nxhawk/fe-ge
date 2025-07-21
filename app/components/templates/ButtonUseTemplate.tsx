@@ -1,8 +1,7 @@
 import { useChatHistory } from '~/lib/persistence';
 import { classNames } from '~/utils/classNames';
 import type { Message } from 'ai';
-// eslint-disable-next-line no-restricted-imports
-import { Button } from '../ui/Button';
+import { Button } from '~/components/ui/Button';
 import { toast } from 'react-toastify';
 import { useGit } from '~/lib/hooks/useGit';
 import { useState } from 'react';
@@ -37,10 +36,9 @@ const MAX_TOTAL_SIZE = 500 * 1024; // 500KB total limit
 
 interface ButtonUseTemplateProps {
   githubUrl: string;
-  branch: string;
 }
 
-const ButtonUseTemplate = ({ githubUrl, branch }: ButtonUseTemplateProps) => {
+const ButtonUseTemplate = ({ githubUrl }: ButtonUseTemplateProps) => {
   const { importChat } = useChatHistory();
   const { ready, gitClone } = useGit();
   const [loading, setLoading] = useState(false);
@@ -53,7 +51,7 @@ const ButtonUseTemplate = ({ githubUrl, branch }: ButtonUseTemplateProps) => {
     setLoading(true);
 
     try {
-      const { workdir, data } = await gitClone(githubUrl, branch);
+      const { workdir, data } = await gitClone(githubUrl);
 
       if (importChat) {
         const filePaths = Object.keys(data).filter((filePath) => filePath === '.env' || !ig.ignores(filePath));
@@ -140,7 +138,7 @@ ${escapeBoltTags(file.content)}
           messages.push(commandsMessage);
         }
 
-        await importChat(`Git Project:${githubUrl.split('/').slice(-1)[0]}`, messages, branch);
+        await importChat(`Git Project:${githubUrl.split('/').slice(-1)[0]}`, messages);
       }
     } catch (error) {
       console.error('Error during import:', error);
