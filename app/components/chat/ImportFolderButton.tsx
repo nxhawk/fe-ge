@@ -133,8 +133,17 @@ export const ImportFolderButton: React.FC<ImportFolderButtonProps> = ({ classNam
         )}
         disabled={isLoading}
       >
-        <span className="i-ph:upload-simple w-4 h-4" />
-        {isLoading ? 'Importing...' : 'Import Folder'}
+        {/* <span className="i-ph:upload-simple w-4 h-4" />
+        {isLoading ? 'Importing...' : 'Import Folder'} */}
+        <div className="flex flex-col items-center">
+          <div className="h-12 w-12 rounded-full bg-purple/30 flex items-center justify-center mb-2">
+            <span className="i-ph:upload-simple w-6 h-6" />
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <span className="font-medium">{isLoading ? 'Uploading...' : 'Upload existing project'}</span>
+            <span className="text-sm text-gray-400">Continue working on your existing code</span>
+          </div>
+        </div>
       </Button>
     </>
   );
