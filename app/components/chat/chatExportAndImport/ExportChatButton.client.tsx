@@ -1,8 +1,12 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { workbenchStore } from '~/lib/stores/workbench';
 import { classNames } from '~/utils/classNames';
+import { useSearchParams } from '@remix-run/react';
 
 export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) => {
+  const [searchParams] = useSearchParams();
+  const branch = searchParams.get('branch');
+
   return (
     <div className="flex border border-bolt-elements-borderColor rounded-md overflow-hidden mr-2 text-sm">
       <DropdownMenu.Root>
@@ -27,7 +31,7 @@ export const ExportChatButton = ({ exportChat }: { exportChat?: () => void }) =>
               'cursor-pointer flex items-center w-auto px-4 py-2 text-sm text-bolt-elements-textPrimary hover:bg-bolt-elements-item-backgroundActive gap-2 rounded-md group relative',
             )}
             onClick={() => {
-              workbenchStore.downloadZip();
+              workbenchStore.downloadZip(branch);
             }}
           >
             <div className="i-ph:code size-4.5"></div>

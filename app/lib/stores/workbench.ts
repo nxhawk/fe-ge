@@ -1,4 +1,7 @@
 import { atom, map, type MapStore, type ReadableAtom, type WritableAtom } from 'nanostores';
+import LightningFS from '@isomorphic-git/lightning-fs';
+import http from 'isomorphic-git/http/web';
+import * as git from 'isomorphic-git';
 import type { EditorDocument, ScrollPosition } from '~/components/editor/codemirror/CodeMirrorEditor';
 import { ActionRunner } from '~/lib/runtime/action-runner';
 import type { ActionCallbackData, ArtifactCallbackData } from '~/lib/runtime/message-parser';
@@ -601,7 +604,8 @@ export class WorkbenchStore {
     return artifacts[id];
   }
 
-  async downloadZip() {
+  async downloadZip(branch: string | null = null) {
+    //  TODO: handle download source code here
     const zip = new JSZip();
     const files = this.files.get();
 
@@ -612,6 +616,9 @@ export class WorkbenchStore {
     const timestampHash = Date.now().toString(36).slice(-6);
     const uniqueProjectName = `${projectName}_${timestampHash}`;
 
+    // --- Folder 1: Mã nguồn hiện tại ---
+    const folder1 = zip.folder('ecommerce-fe');
+
     for (const [filePath, dirent] of Object.entries(files)) {
       if (dirent?.type === 'file' && !dirent.isBinary) {
         const relativePath = extractRelativePath(filePath);
@@ -619,22 +626,88 @@ export class WorkbenchStore {
         // split the path into segments
         const pathSegments = relativePath.split('/');
 
-        // if there's more than one segment, we need to create folders
-        if (pathSegments.length > 1) {
-          let currentFolder = zip;
+        /*
+         * if there's more than one segment, we need to create folders
+         * if (pathSegments.length > 1) {
+         *   let currentFolder = zip;
+         */
 
-          for (let i = 0; i < pathSegments.length - 1; i++) {
-            currentFolder = currentFolder.folder(pathSegments[i])!;
-          }
-          currentFolder.file(pathSegments[pathSegments.length - 1], dirent.content);
-        } else {
-          // if there's only one segment, it's a file in the root
-          zip.file(relativePath, dirent.content);
+        /*
+         *   for (let i = 0; i < pathSegments.length - 1; i++) {
+         *     currentFolder = currentFolder.folder(pathSegments[i])!;
+         *   }
+         *   currentFolder.file(pathSegments[pathSegments.length - 1], dirent.content);
+         * } else {
+         *   // if there's only one segment, it's a file in the root
+         *   zip.file(relativePath, dirent.content);
+         * }
+         */
+        let currentFolder = folder1!;
+
+        for (let i = 0; i < pathSegments.length - 1; i++) {
+          currentFolder = currentFolder.folder(pathSegments[i])!;
         }
+        currentFolder.file(pathSegments[pathSegments.length - 1], dirent.content);
       }
     }
 
-    // Generate the zip file and save it
+    // Hàm tái sử dụng để clone và thêm repo vào zip
+    async function cloneAndAddToZip(repoUrl: string, folderName: string, branch: string = 'main') {
+      const fs = new LightningFS(folderName); // tạo FS khác nhau cho từng repo
+      const pfs = fs.promises;
+      const dir = `/${folderName}`;
+
+      try {
+        await git.clone({
+          fs,
+          http,
+          dir,
+          url: repoUrl,
+          corsProxy: '/api/git-proxy',
+          singleBranch: true,
+          depth: 1,
+          ref: branch,
+        });
+
+        const folder = zip.folder(folderName)!;
+
+        async function addGitFiles(path: string, zipFolder: JSZip) {
+          const entries = await pfs.readdir(path);
+
+          for (const name of entries) {
+            const fullPath = `${path}/${name}`;
+            const stat = await pfs.stat(fullPath);
+
+            if (stat.type === 'file') {
+              const content = await pfs.readFile(fullPath, { encoding: 'utf8' });
+              zipFolder.file(name, content);
+            } else if (stat.type === 'dir') {
+              const subFolder = zipFolder.folder(name);
+
+              if (subFolder) {
+                await addGitFiles(fullPath, subFolder);
+              }
+            }
+          }
+        }
+
+        await addGitFiles(dir, folder);
+      } catch (err) {
+        console.error(`❌ Lỗi khi clone repo ${repoUrl}:`, err);
+      }
+    }
+
+    // --- Clone repo thứ nhất ---
+    await cloneAndAddToZip(
+      'https://github.com/FinalProject-HCMUS/ecommerce-admin.git',
+      'ecommerce-admin',
+      branch ?? 'main',
+    );
+
+    // --- Clone repo thứ hai ---
+    await cloneAndAddToZip('https://github.com/FinalProject-HCMUS/ecommerce-backend.git', 'ecommerce-be', 'develop');
+
+    // Tạo file ZIP cuối cùng
     const content = await zip.generateAsync({ type: 'blob' });
     saveAs(content, `${uniqueProjectName}.zip`);
   }
