@@ -17,7 +17,7 @@ import Cookies from 'js-cookie';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 import styles from './BaseChat.module.scss';
-import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
+import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton.client';
 import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
 import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
 
