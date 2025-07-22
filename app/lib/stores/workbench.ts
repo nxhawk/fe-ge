@@ -697,15 +697,17 @@ export class WorkbenchStore {
       }
     }
 
-    // --- Clone repo thứ nhất ---
-    await cloneAndAddToZip(
-      'https://github.com/FinalProject-HCMUS/ecommerce-admin.git',
-      'ecommerce-admin',
-      branch ?? 'main',
-    );
+    if (branch) {
+      // --- Clone repo thứ nhất ---
+      await cloneAndAddToZip(
+        'https://github.com/FinalProject-HCMUS/ecommerce-admin.git',
+        'ecommerce-admin',
+        branch ?? 'main',
+      );
 
-    // --- Clone repo thứ hai ---
-    await cloneAndAddToZip('https://github.com/FinalProject-HCMUS/ecommerce-backend.git', 'ecommerce-be', 'develop');
+      // --- Clone repo thứ hai ---
+      await cloneAndAddToZip('https://github.com/FinalProject-HCMUS/ecommerce-backend.git', 'ecommerce-be', 'develop');
+    }
 
     // Tạo file ZIP cuối cùng
     const content = await zip.generateAsync({ type: 'blob' });
