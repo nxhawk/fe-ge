@@ -61,7 +61,7 @@ export default function Index() {
         {/* List model */}
         <div className="container mx-auto space-y-6">
           <img
-            src={template?.backgroundImage || '/assets/template-2.png'}
+            src={template?.backgroundImage || '/assets/template-1.png'}
             alt={'image'}
             className="object-fit w-full h-[80vh]"
           />
