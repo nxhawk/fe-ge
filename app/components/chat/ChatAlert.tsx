@@ -17,6 +17,10 @@ export default function ChatAlert({ alert, clearAlert, postMessage }: Props) {
     ? 'We encountered an error while running the preview. Would you like Bolt to analyze and help resolve this issue?'
     : 'We encountered an error while running terminal commands. Would you like Bolt to analyze and help resolve this issue?';
 
+  if (title === 'Preview Error') {
+    return null;
+  }
+
   return (
     <AnimatePresence>
       <motion.div
