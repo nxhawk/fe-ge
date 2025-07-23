@@ -22,3 +22,11 @@ export interface IProviderSetting {
 export type IProviderConfig = ProviderInfo & {
   settings: IProviderSetting;
 };
+
+export type IConfigModel = {
+  name: string;
+  description: string;
+  apiKey?: string;
+  isDefault?: boolean;
+  placeholder?: string;
+};
